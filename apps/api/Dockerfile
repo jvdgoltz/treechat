@@ -9,6 +9,6 @@ WORKDIR /app
 RUN pip install .
 
 
-ENV GUNICORN_CMD_ARGS="--bind=0.0.0.0:$PORT --workers=$GUNICORN_WORKERS"
+ENV GUNICORN_CMD_ARGS="--bind=0.0.0.0:$PORT --workers=$GUNICORN_WORKERS --worker-class uvicorn.workers.UvicornWorker"
 
 ENTRYPOINT ["gunicorn", "app:app"]
