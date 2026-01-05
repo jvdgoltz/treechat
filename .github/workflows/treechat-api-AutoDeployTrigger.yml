@@ -1,4 +1,4 @@
-name: Trigger auto deployment for treechat-api
+name: Trigger auto deployment for API
 
 # When this action will be executed
 on:
@@ -27,9 +27,9 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.TREECHATAPI_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.TREECHATAPI_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.TREECHATAPI_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.TREECHAT_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TREECHAT_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.TREECHAT_AZURE_SUBSCRIPTION_ID }}
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
@@ -38,8 +38,8 @@ jobs:
           _dockerfilePathKey_: _dockerfilePath_
           _targetLabelKey_: _targetLabel_
           registryUrl: treechat.azurecr.io
-          registryUsername: ${{ secrets.TREECHATAPI_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.TREECHATAPI_REGISTRY_PASSWORD }}
+          registryUsername: ${{ secrets.TREECHAT_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TREECHAT_REGISTRY_PASSWORD }}
           containerAppName: treechat-api
           resourceGroup: dev-no-iac
           imageToBuild: treechat.azurecr.io/treechat-api:${{ github.sha }}

@@ -37,7 +37,7 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   retention_in_days   = 30
 }
 
-resource "azurerm_container_app_environment" "backend" {
+resource "azurerm_container_app_environment" "treechat" {
   name                       = "Treechat-Environment"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
@@ -45,15 +45,40 @@ resource "azurerm_container_app_environment" "backend" {
 }
 
 resource "azurerm_container_app" "backend" {
-  name                         = "treechat-backend"
-  container_app_environment_id = azurerm_container_app_environment.backend.id
+  name                         = "treechat-api"
+  container_app_environment_id = azurerm_container_app_environment.treechat.id
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
 
   template {
     container {
       name   = "examplecontainerapp"
-      image  = "mcr.microsoft.com/k8se/quickstart:latest"
+      image  = "${azurerm_container_registry.acr.login_server}/treechat-api:latest"
+      cpu    = 0.25
+      memory = "0.5Gi"
+    }
+  }
+
+  ingress {
+    external_enabled = true
+    target_port = 80
+    traffic_weight {
+        percentage = 100
+        latest_revision = true
+    }
+  }
+}
+
+resource "azurerm_container_app" "frontend" {
+  name                         = "treechat-frontend"
+  container_app_environment_id = azurerm_container_app_environment.treechat.id
+  resource_group_name          = azurerm_resource_group.rg.name
+  revision_mode                = "Single"
+
+  template {
+    container {
+      name   = "examplecontainerapp"
+      image  = "${azurerm_container_registry.acr.login_server}/treechat-frontend:latest"
       cpu    = 0.25
       memory = "0.5Gi"
     }
