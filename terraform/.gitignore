@@ -1,0 +1,26 @@
+# Terraform working dir
+.terraform/
+.terraform.lock.hcl  # <-- DO NOT ignore; keep this line OUT of .gitignore
+
+# State (never commit)
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Plans
+*.tfplan
+*.plan
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Local CLI config (can contain creds)
+.terraformrc
+terraform.rc
+
+# Override files (local tweaks)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
